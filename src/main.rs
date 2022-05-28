@@ -23,7 +23,6 @@ fn main() -> ! {
         pins.pc4.into_pull_up_input().downgrade(),
         pins.pc5.into_pull_up_input().downgrade(),
         pins.pc6.into_pull_up_input().downgrade(),
-        pins.pd0.into_pull_up_input().downgrade(),
     ];
     let mut leds = [
         pins.pb0.into_output().downgrade(),
@@ -33,7 +32,16 @@ fn main() -> ! {
         pins.pb4.into_output().downgrade(),
         pins.pb5.into_output().downgrade(),
         pins.pb6.into_output().downgrade(),
-        pins.pb7.into_output().downgrade(),
+    ];
+    let mut opendrain = [
+        pins.pd0.into_opendrain().downgrade(),
+        pins.pd1.into_opendrain().downgrade(),
+        pins.pd2.into_opendrain().downgrade(),
+        pins.pd3.into_opendrain().downgrade(),
+        pins.pd4.into_opendrain().downgrade(),
+        pins.pd5.into_opendrain().downgrade(),
+        pins.pd6.into_opendrain().downgrade(),
+        pins.pd7.into_opendrain().downgrade(),
     ];
     let mut current_button_pressed = [false; 8];
     let mut current_output = [false; 8];
@@ -58,7 +66,7 @@ fn main() -> ! {
     // }
 
     loop {
-        for idx in 0..8 {
+        for idx in 0..7 {
             let button_pressed = buttons[idx].is_low();
             if button_pressed != current_button_pressed[idx] {
                 if button_pressed {
@@ -69,8 +77,10 @@ fn main() -> ! {
             }
             if current_output[idx] {
                 leds[idx].set_low();
+                opendrain[idx].set_low();
             } else {
                 leds[idx].set_high();
+                opendrain[idx].set_high();
             }
         }
     }
